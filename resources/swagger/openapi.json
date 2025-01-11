@@ -1,0 +1,333 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Book API",
+        "description": "API documentation for managing books"
+    },
+    "servers": [{
+        "url": "http://127.0.0.1:8000",
+        "description": "Local server"
+    }],
+    "paths": {
+        "/api/books": {
+            "get": {
+                "operationId": "getBooksList",
+                "tags": ["Books"],
+                "summary": "Get list of books",
+                "description": "Returns a list of books",
+                "security": [{
+                    "bearer": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "books": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Book"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "storeBook",
+                "tags": ["Books"],
+                "summary": "Store a new book",
+                "description": "Store a new book",
+                "security": [{
+                    "bearer": []
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Book created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "book": {
+                                            "$ref": "#/components/schemas/Book"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/books/{book}": {
+            "patch": {
+                "operationId": "updateBook",
+                "tags": ["Books"],
+                "summary": "Update an existing book",
+                "description": "Update an existing book",
+                "parameters": [{
+                    "name": "book",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }],
+                "security": [{
+                    "bearer": []
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "book": {
+                                            "$ref": "#/components/schemas/Book"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteBook",
+                "tags": ["Books"],
+                "summary": "Delete a book",
+                "description": "Delete a book",
+                "parameters": [{
+                    "name": "book",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }],
+                "security": [{
+                    "bearer": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Book deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "operationId": "loginUser",
+                "tags": ["Auth"],
+                "summary": "Login a user",
+                "description": "Authenticate a user and return a token",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "description": "Authentication token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "operationId": "logoutUser",
+                "tags": ["Auth"],
+                "summary": "Logout a user",
+                "description": "Invalidate the user's token",
+                "responses": {
+                    "200": {
+                        "description": "Logout successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Logout message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Book": {
+                "type": "object",
+                "title": "Book",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Book ID"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Book title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Book description"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book author"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "description": "User ID"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Update timestamp"
+                    }
+                }
+            },
+            "StoreBookRequest": {
+                "type": "object",
+                "required": ["title", "author"],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Book description"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book author"
+                    }
+                }
+            },
+            "UpdateBookRequest": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Book description"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book author"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "User email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User password"
+                    }
+                }
+            }
+        }
+    }
+}
