@@ -19,9 +19,9 @@ Follow these steps to get the project running:
 Clone the repository to your local machine using:
 
 ```bash
-git clone https://github.com/yourusername/your-repository-name.git
+git clone https://github.com/ValonKadriaj/books-api.git
 
-cd yourrepository
+cd books-api
 composer install
 cp .env.example .env
 php artisan key:generate
