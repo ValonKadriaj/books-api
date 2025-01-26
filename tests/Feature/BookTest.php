@@ -32,12 +32,13 @@ class BookTest extends TestCase
     /** @test */
     public function authenticated_user_can_get_all_books()
     {
-        Book::factory()->count(3)->create();
+        $books = Book::factory()->count(3)->create();
 
         $response = $this->setHeaders()->getJson('/api/books');
      
         $response->assertStatus(200)
-                 ->assertJsonStructure(['books']);
+        ->assertJson(['books' => $books->toArray()]);
+
     }
 
     /** @test */

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValidateBookRequest;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function index()
     {
-        return response()->json(['books' => Book::all()]);
+        return response()->json(['books' => User::all()]);
     }
 
     public function store(ValidateBookRequest $request)
