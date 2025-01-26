@@ -11,7 +11,7 @@ class BookController extends Controller
 {
     public function index()
     {
-        return response()->json(['books' => User::all()]);
+        return response()->json(['books' => Book::all()]);
     }
 
     public function store(ValidateBookRequest $request)
